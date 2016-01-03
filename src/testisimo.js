@@ -1,11 +1,6 @@
 // TODO: SERVER
-// uzivatel ma companies a projects, s read/write pristupom
-// company
-// projekty
-// testy maju 
-// verzie testov
-// uzivatel read/write na projekt/test, public token
-// test contains url - predefined start
+// users, companies, projects, read/write/public access
+// tests versions
 // commit test version - if version conflict (accept theirs/yours, merge)
 
 (function(){
