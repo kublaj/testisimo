@@ -344,7 +344,11 @@
     
     Testisimo.prototype.init = function(cb, timeout){
         var testisimo = this;
-        document.addEventListener('DOMContentLoaded', function(){
+        
+        if(document.readyState === 'complete') createElements();
+        else window.addEventListener('onload', createElements);
+                                  
+        function createElements(){
             document.body.style['margin-right'] = '250px';
             testisimo.addStyles();
             testisimo.addContainer();
@@ -354,14 +358,14 @@
             iframe.document.open();
             iframe.document.write(testisimo.appHTML());
             iframe.document.close();
-            
+
             for(var i=0;i<window.frames.length;i++){
                 addErrorListener(window.frames[i]);
             }
-            
+
             if(errors.length) for(var i=0;i<errors.length;i++) this.error(errors[i].error, errors[i].file, errors[i].line, errors[i].column);
             if(cb) setTimeout(cb, timeout || 0);
-        });
+        }
     };
     
     /*
@@ -1167,9 +1171,10 @@ Testisimo.prototype.appScript = function(){
         };
 
         $scope.$on('testisimo:selected', function(e, target){
-            if(selectedCb) selectedCb(target);
-            selectedCb = null;
-            $timeout();
+            $timeout(function(){
+                if(selectedCb) selectedCb(target);
+                selectedCb = null;
+            });
         });
 
         $scope.showSelectedElements = function(step){
@@ -3044,7 +3049,7 @@ Testisimo.prototype.actions.setValueKeyboard = {
         }
     }
 };Testisimo.prototype.actions.setLocation = {
-    name:'Set Location',
+    name:'Location Set URL',
     optsTemplate:'<input type="text" class="form-control input-sm" placeholder="/mypath" ng-model="action.opts.location">',
     optsVariables: ['location'], // which opts properties can contain text variabes e.g. {myvar}
     optsPreview: function(opts){
@@ -3055,7 +3060,16 @@ Testisimo.prototype.actions.setValueKeyboard = {
         window.location = testisimo.replaceVariables(opts.location, variables);
         done();
     }
-};Testisimo.prototype.actions.runTest = {
+};
+
+Testisimo.prototype.actions.reloadLocation = {
+    name:'Location Reload',
+    handler: function(targets, opts, variables, done){
+        window.location.reload();
+        done();
+    }
+};
+Testisimo.prototype.actions.runTest = {
     name:' » Run Test',
     optsTemplate:
     '<select class="form-control input-sm" placeholder="choose test" '+
