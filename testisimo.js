@@ -60,7 +60,7 @@
     Testisimo.prototype.minStepWait = 100; // wait between steps
     Testisimo.prototype.minActionWait = 100; // wait on action end, because if it will run actions too fast, user will not be able to see progress
     Testisimo.prototype.waitForElementInterval = 250; // interval to check if element exists in DOM
-    Testisimo.prototype.maxWaitForElementAttempts = 8; // sometimes, when testing frameworks like angular or async actions, we need to wait to UI rendering ends, so do some repeated check
+    Testisimo.prototype.maxWaitForElementAttempts = 16; // sometimes, when testing frameworks like angular or async actions, we need to wait to UI rendering ends, so do some repeated check
     Testisimo.prototype.speed = 1;
     
     Testisimo.prototype.resources = {
@@ -361,7 +361,13 @@
                 iframe.document.close();
 
                 for(var i=0;i<window.frames.length;i++){
-                    addErrorListener(window.frames[i]);
+                    // may throw exception if iframe is not same origin
+                    try {
+                        addErrorListener(window.frames[i]); 
+                    } 
+                    catch(err){ 
+                        console.warn('Cannot add Errors Listener to iframe "' +window.frames[i].location + '" , Error: ' +err.message); 
+                    }
                 }
 
                 if(errors.length) for(var i=0;i<errors.length;i++) this.error(errors[i].error, errors[i].file, errors[i].line, errors[i].column);
@@ -3071,7 +3077,7 @@ Testisimo.prototype.actions.reloadLocation = {
         return this.name;
     },
     handler: function(targets, opts, variables, done){
-        window.location.reload();
+        window.location.reload(true);
         done();
     }
 };

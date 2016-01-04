@@ -19,7 +19,7 @@ Testisimo.prototype.actions.reloadLocation = {
         return this.name;
     },
     handler: function(targets, opts, variables, done){
-        window.location.reload();
+        window.location.reload(true);
         done();
     }
 };
