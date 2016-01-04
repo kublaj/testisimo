@@ -1,7 +1,7 @@
 # testisimo
 End-to-end tester in pure javascript
 
-## for production
+## production
 ```
 <script type="text/javascript">
     (function() {
@@ -19,7 +19,7 @@ or
 <script src="https://cdn.rawgit.com/nodejs-enterprise/testisimo/master/testisimo.min.js?v=0.1.0"></script>
 ```
 
-## for testing
+## testing
 ```
 <script type="text/javascript">
     (function() {
@@ -31,4 +31,8 @@ or
         x.parentNode.insertBefore(s, x);
     })();
 </script>
+```
+or
+```
+<script src="https://rawgit.com/nodejs-enterprise/testisimo/master/testisimo.js"></script>
 ```

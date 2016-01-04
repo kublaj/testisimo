@@ -3066,6 +3066,7 @@ Testisimo.prototype.actions.setValueKeyboard = {
 
 Testisimo.prototype.actions.reloadLocation = {
     name:'Location Reload',
+    optsTemplate:'',
     handler: function(targets, opts, variables, done){
         window.location.reload();
         done();
