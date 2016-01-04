@@ -26,7 +26,7 @@ or
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.async = true;
-        s.src = 'https://cdn.rawgit.com/nodejs-enterprise/testisimo/master/testisimo.js?timestamp=' + (new Date().getTime());
+        s.src = 'https://rawgit.com/nodejs-enterprise/testisimo/master/testisimo.js';
         var x = document.getElementsByTagName('script')[0];
         x.parentNode.insertBefore(s, x);
     })();
