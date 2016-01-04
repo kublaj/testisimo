@@ -277,7 +277,7 @@ Testisimo.prototype.appScript = function(){
         $scope.copy = angular.copy;
         $scope.merge = angular.merge;
         $scope.objectKeys = function(obj){
-            return Object.keys(obj);
+            return Object.keys(obj||{});
         };
         $scope.mergeVariables = function(defaultVariables, variables){
             defValues = {};
