@@ -1,5 +1,5 @@
 Testisimo.prototype.actions.setLocation = {
-    name:'Set Location',
+    name:'Location Set URL',
     optsTemplate:'<input type="text" class="form-control input-sm" placeholder="/mypath" ng-model="action.opts.location">',
     optsVariables: ['location'], // which opts properties can contain text variabes e.g. {myvar}
     optsPreview: function(opts){
@@ -8,6 +8,14 @@ Testisimo.prototype.actions.setLocation = {
     handler: function(targets, opts, variables, done){
         if(!opts.location) return done(new Error('Location not set'));
         window.location = testisimo.replaceVariables(opts.location, variables);
+        done();
+    }
+};
+
+Testisimo.prototype.actions.reloadLocation = {
+    name:'Location Reload',
+    handler: function(targets, opts, variables, done){
+        window.location.reload();
         done();
     }
 };

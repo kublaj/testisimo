@@ -426,9 +426,10 @@ Testisimo.prototype.appScript = function(){
         };
 
         $scope.$on('testisimo:selected', function(e, target){
-            if(selectedCb) selectedCb(target);
-            selectedCb = null;
-            $timeout();
+            $timeout(function(){
+                if(selectedCb) selectedCb(target);
+                selectedCb = null;
+            });
         });
 
         $scope.showSelectedElements = function(step){
