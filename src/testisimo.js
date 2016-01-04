@@ -349,22 +349,24 @@
         else window.addEventListener('onload', createElements);
                                   
         function createElements(){
-            document.body.style['margin-right'] = '250px';
-            testisimo.addStyles();
-            testisimo.addContainer();
-            var iframe = testisimo.getIframe();
+            setTimeout(function(){
+                document.body.style['margin-right'] = '250px';
+                testisimo.addStyles();
+                testisimo.addContainer();
+                var iframe = testisimo.getIframe();
 
-            iframe.testisimo = testisimo;
-            iframe.document.open();
-            iframe.document.write(testisimo.appHTML());
-            iframe.document.close();
+                iframe.testisimo = testisimo;
+                iframe.document.open();
+                iframe.document.write(testisimo.appHTML());
+                iframe.document.close();
 
-            for(var i=0;i<window.frames.length;i++){
-                addErrorListener(window.frames[i]);
-            }
+                for(var i=0;i<window.frames.length;i++){
+                    addErrorListener(window.frames[i]);
+                }
 
-            if(errors.length) for(var i=0;i<errors.length;i++) this.error(errors[i].error, errors[i].file, errors[i].line, errors[i].column);
-            if(cb) setTimeout(cb, timeout || 0);
+                if(errors.length) for(var i=0;i<errors.length;i++) this.error(errors[i].error, errors[i].file, errors[i].line, errors[i].column);
+                if(cb) setTimeout(cb, timeout || 0);
+            },50);
         }
     };
     
