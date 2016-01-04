@@ -1,5 +1,14 @@
 Testisimo.prototype.actions.runTest = {
     name:' » Run Test',
+    optsTemplateScope:{
+        mergeVariables: function(defaultVariables, variables){
+            defValues = {};
+            for(var key in defaultVariables) defValues[key] = {
+                defaultValue: defaultVariables[key].value
+            };
+            return angular.merge(defValues, variables);
+        }
+    },
     optsTemplate:
     '<select class="form-control input-sm" placeholder="choose test" '+
     'style="margin-bottom:5px"'+

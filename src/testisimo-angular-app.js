@@ -195,7 +195,7 @@ Testisimo.prototype.appHTML = function(){
                                                         '<button class="btn btn-default btn-sm" style="width:25%" ng-click="moveAction(step,action,$index+1)" ng-disabled="$last"><i class="fa fa-arrow-down"></i></button>'+
                                                         '<button class="btn btn-default btn-sm" style="width:25%" ng-click="step.actions.splice($index,1)"><i class="fa fa-trash"></i></button>'+
                                                         '<select class="form-control input-sm" placeholder="action" ng-options="id as a.name for (id,a) in availableActions" ng-model="action.action"></select>'+
-                                                        '<div ng-include="action.action"></div>'+
+                                                        '<div action-template></div>'+
                                                     '</div>'+
                                                 '</div>'+
                                                 '<div class="error-container" ng-if="action.$error">'+
@@ -259,6 +259,19 @@ Testisimo.prototype.appScript = function(){
             }
         };
     }])
+    .directive('actionTemplate', ['testisimo', function(testisimo){
+        return {
+            restrict:'A',
+            template: '<div ng-include="$parent.action.action"></div>',
+            link: function(scope, elm, attrs){
+                var action = testisimo.actions[ scope.$parent.action.action ];
+                if(!action || !action.optsTemplateScope) return;
+                
+                // copy scope methods
+                for(var key in action.optsTemplateScope) scope[key] = action.optsTemplateScope[key];
+            }
+        };
+    }])
     .directive('stepContainer', ['$window', function($window){
         return {
             restrict:'C',
@@ -273,18 +286,14 @@ Testisimo.prototype.appScript = function(){
     }])
     .controller('TestCtrl',['$scope','$timeout','$interval','testisimo',function($scope, $timeout, $interval, testisimo){
         $scope.wasResumed = false; // check if test is resumed after location change
+        $scope.log = function(){
+            console.log(arguments.length >= 1 ? arguments[0] : arguments);
+        };
         $scope.testisimo = testisimo;
         $scope.copy = angular.copy;
         $scope.merge = angular.merge;
         $scope.objectKeys = function(obj){
             return Object.keys(obj||{});
-        };
-        $scope.mergeVariables = function(defaultVariables, variables){
-            defValues = {};
-            for(var key in defaultVariables) defValues[key] = {
-                defaultValue: defaultVariables[key].value
-            };
-            return angular.merge(defValues, variables);
         };
 
         $scope.executingSequence = false;
