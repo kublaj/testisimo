@@ -15,6 +15,9 @@ Testisimo.prototype.actions.setLocation = {
 Testisimo.prototype.actions.reloadLocation = {
     name:'Location Reload',
     optsTemplate:'',
+    optsPreview: function(opts){
+        return this.name;
+    },
     handler: function(targets, opts, variables, done){
         window.location.reload();
         done();
