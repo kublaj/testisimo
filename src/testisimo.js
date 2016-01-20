@@ -743,7 +743,10 @@
      * TESTISIMO INSTANCE
      */
     window.Testisimo = Testisimo; // publish constructor
+    if(typeof window.testisimoConstructor === 'function') window.testisimoConstructor(window.Testisimo);
+    
     window.testisimo = new Testisimo(); // publish instance
+    if(typeof window.testisimoInstance === 'function') window.testisimoInstance(window.testisimo);
     
     /*
      * INIT

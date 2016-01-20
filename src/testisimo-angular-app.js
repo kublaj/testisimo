@@ -119,18 +119,18 @@ Testisimo.prototype.appHTML = function(){
                                             '<strong>{{$index+1}}.</strong>'+
                                         '</button>'+
                                         '<div class="btn-group btn-group-xs">'+
-                                            '<button class="btn btn-default btn-xs btn-circle" ng-click="execStep(step)" ng-disabled="step.$executing || !step.actions.length"><i class="fa fa-fw fa-play" ng-class="{\'fa-play\':!step.$executing,\'fa-cog fa-spin\':step.$executing}"></i></button>'+
-                                            '<button class="btn btn-default btn-xs btn-circle" ng-click="execFromStep(step)" ng-disabled="step.$executing || !step.actions.length"><i class="fa fa-fw fa-step-forward"></i></button>'+
-                                        '</div>'+
+                                            '<button class="btn btn-light btn-xs btn-circle" ng-click="execStep(step)" ng-disabled="step.$executing || !step.actions.length"><i class="fa fa-play" ng-class="{\'fa-play\':!step.$executing,\'fa-cog fa-spin\':step.$executing}"></i></button>'+
+                                            '<button class="btn btn-light btn-xs btn-circle" ng-click="execFromStep(step)" ng-disabled="step.$executing || !step.actions.length"><i class="fa fa-step-forward"></i></button>'+
+                                        '</div>&nbsp;'+
                                         '<div class="btn-group btn-group-xs">'+
-                                            '<button class="btn btn-default btn-xs btn-circle" ng-click="copyStep(step)" ng-disabled="step.$executing"><i class="fa fa-fw fa-copy"></i></button>'+
-                                            '<button class="btn btn-default btn-xs btn-circle" ng-click="test.steps.splice($index+1,0,{actions:[{}] })" ng-disabled="step.$executing"><i class="fa fa-fw fa-plus"></i></button>'+
-                                        '</div>'+
+                                            '<button class="btn btn-light btn-xs btn-circle" ng-click="copyStep(step)" ng-disabled="step.$executing"><i class="fa fa-copy"></i></button>'+
+                                            '<button class="btn btn-light btn-xs btn-circle" ng-click="test.steps.splice($index+1,0,{actions:[{}] })" ng-disabled="step.$executing"><i class="fa fa-plus"></i></button>'+
+                                        '</div>&nbsp;'+
                                         '<div class="btn-group btn-group-xs">'+
-                                            '<button class="btn btn-default btn-xs btn-circle" ng-click="moveStep(step, $index-1)" ng-disabled="step.$executing || $first"><i class="fa fa-fw fa-arrow-up"></i></button>'+
-                                            '<button class="btn btn-default btn-xs btn-circle" ng-click="moveStep(step, $index+1)" ng-disabled="step.$executing || $last"><i class="fa fa-fw fa-arrow-down"></i></button>'+
+                                            '<button class="btn btn-light btn-xs btn-circle" ng-click="moveStep(step, $index-1)" ng-disabled="step.$executing || $first"><i class="fa fa-arrow-up"></i></button>'+
+                                            '<button class="btn btn-light btn-xs btn-circle" ng-click="moveStep(step, $index+1)" ng-disabled="step.$executing || $last"><i class="fa fa-arrow-down"></i></button>'+
                                         '</div>'+
-                                        '<button class="btn btn-default btn-xs btn-circle pull-right" ng-click="test.steps.splice($index, 1)" ng-disabled="step.$executing || test.steps.length===1"><i class="fa fa-trash"></i></button>'+
+                                        '<button class="btn btn-light btn-xs btn-circle pull-right" ng-click="test.steps.splice($index, 1)" ng-disabled="step.$executing || test.steps.length===1"><i class="fa fa-trash"></i></button>'+
                                     '</div>'+
                                     '<div class="step-options" ng-if="!step.$collapsed">'+
                                         '<div style="margin-top:2px;">'+
