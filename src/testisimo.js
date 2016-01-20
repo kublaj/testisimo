@@ -346,7 +346,7 @@
         var testisimo = this;
         
         if(['loaded', 'interactive', 'complete'].indexOf(document.readyState) > -1) createElements();
-        else window.addEventListener('onload', createElements);
+        else window.addEventListener('load', createElements);
         
         function createElements(){
             setTimeout(function(){
