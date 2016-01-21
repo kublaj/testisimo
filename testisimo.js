@@ -204,6 +204,7 @@
     };
 
     Testisimo.prototype.overlayClick = function(e){
+        e.stopPropagation();
         var x = e.x;
         var y = e.y;
 
