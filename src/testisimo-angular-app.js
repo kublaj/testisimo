@@ -264,11 +264,26 @@ Testisimo.prototype.appScript = function(){
             restrict:'A',
             template: '<div ng-include="$parent.action.action"></div>',
             link: function(scope, elm, attrs){
-                var action = testisimo.actions[ scope.$parent.action.action ];
-                if(!action || !action.optsTemplateScope) return;
-                
+                scope.$watch(function(){
+                    return scope.$parent.action.action;
+                }, copyTemplateScope);
+
                 // copy scope methods
-                for(var key in action.optsTemplateScope) scope[key] = action.optsTemplateScope[key];
+                var addedKeys = [];
+                function copyTemplateScope(){
+                    var action = testisimo.actions[ scope.$parent.action.action ];
+                    if(addedKeys.length){
+                        for(var key in scope) if(addedKeys.indexOf(key) > -1) {
+                            delete scope[key];
+                        }
+                    }
+                    if(!action || !action.optsTemplateScope) {
+                        addedKeys = [];
+                        return;
+                    }
+                    for(var key in action.optsTemplateScope) scope[key] = action.optsTemplateScope[key];
+                    addedKeys = Object.keys(action.optsTemplateScope);
+                }
             }
         };
     }])
