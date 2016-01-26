@@ -152,19 +152,133 @@
             'background-clip: border-box;'+
             'background-size: 80px 80px;'+
             '}'+
-            '#testisimo-container { z-index:9999;position:fixed;top:0px;width:260px;right:0px;bottom:0px;background-color:#fff;box-shadow:-4px 0px 15px 0px rgba(50, 50, 50, 0.5); }'+
-            '.testisimo-iframe { border:none;width:100%;height:100%; }';
+            '#testisimo-container { z-index:9999;position:fixed;width:300px;background-color:#fff;box-shadow:0px 0px 30px 0px rgba(50, 50, 50, 0.75);padding:25px 0px; }'+
+            '.testisimo-iframe { border:none;width:100%;height:100%; }' +
+            '#testisimo-container-header { height:25px;background-color:#000;cursor:move;position:absolute;top:0;left:0;right:0; }'+
+            '#testisimo-container-footer { height:25px;background-color:#000;cursor:row-resize;position:absolute;bottom:0;left:0;right:0; }'+
+            '#testisimo-container-overlay { z-index:1;position:absolute;top:0px;left:0px;bottom:0px;right:0px;display:none;cursor:move; }'+
+            '#testisimo-container.testisimo-dragged #testisimo-container-overlay { display:block; }'+
+            '#testisimo-container-header button { border:none;background-color:transparent;font-size:12px;color:#fff;padding:2px 10px; }'+
+            '.testisimo-icon, .testisimo-icon:focus, .testisimo-icon:active { background-repeat:no-repeat;background-position:center;outline:none; }'+
+            '.testisimo-icon-pin { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAAAYFBMVEUAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDPKpCdAAAAH3RSTlMAAQINGh4pLzY8QEpMVVtnb3CUm6CvvsXKz+bx8/n7jVbynAAAAE9JREFUeAGNx0cWhCAUBMCeQcWcc6Dvf0v1C+/JztoVLg1vW4BHSxHBmkpD5nDG5CDTb/3NlSELO7VSdBA9LS1dXDM4e4y3IfRaK6/6D3ECwWMHu2qhe6cAAAAASUVORK5CYII=);}'+
+            '.testisimo-icon-bars { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOBAMAAADtZjDiAAAAIVBMVEUAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDcWqnoAAAACnRSTlMAAQIGY2R40dPvH5wsVAAAACdJREFUCFtjYIACZWMQMGSYtQoEljF0gemlDOigCiy+BK4Opo9IcwCKrB8iFAmPNQAAAABJRU5ErkJggg==);}'+
+            '.testisimo-icon-caret-up {	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAAAHlBMVEUAAACAgICAgICAgICAgICAgICAgICAgICAgICAgIAAvJH/AAAACXRSTlMAARVkaZKVpc+5VbSfAAAALklEQVR42p3HuREAIBADMR+/+2+YgWQhBGXSh3StuMU5rzO+xvd4NqrUjRF6MQGnCgH5SY+SpgAAAABJRU5ErkJggg==);}'+
+            '.testisimo-icon-arrow-left { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOBAMAAADtZjDiAAAAJ1BMVEUAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIBjwPSjAAAADHRSTlMAAgQFBwibvMDO0/cbjaSWAAAAIElEQVQIW2NgIATEIBRTDYT2PAMCpxmioDRzD6o6AgAAfkwLa2yaHx8AAAAASUVORK5CYII=);}'+
+            '.testisimo-icon-arrow-right { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOBAMAAADtZjDiAAAALVBMVEUAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDaI72bAAAADnRSTlMAAgQFBgiVm7e+ytH3+SaT/zIAAAAkSURBVAhbY2AgBhRCFb00YDj3DgS2MtwD00sgEi8UIHQiQcMAVFAPRZn9mbAAAAAASUVORK5CYII=);}';
         document.body.appendChild(styleElm);
     };
     
+    var containerElm;
     Testisimo.prototype.addContainer = function(){
-        var containerElm = document.createElement('DIV');
+        var testisimo = this;
+        var dimensions = testisimo.localStore.getOptions();
+        containerElm = document.createElement('DIV');
         containerElm.id = 'testisimo-container';
-        var iframeElm = document.createElement('IFRAME');
-        iframeElm.id = this.iframeId;
-        this.toggleClass(iframeElm, 'testisimo-iframe'); // add css class
-        containerElm.appendChild(iframeElm);
+        
+        // check if conteiner is not outside visible area
+        var maxTop = window.innerHeight - 60;
+        var maxLeft = window.innerWidth - 320;
+        var top = parseInt(dimensions.top, 10) || 20;
+        var left = parseInt(dimensions.left, 10) || 20;
+        if(top < 0) top = 20;
+        else if(top > maxTop) top = maxTop;
+        if(left < 0) left = 20;
+        else if(left > maxLeft) left = maxLeft;
+        
+        containerElm.style.top = top + 'px';
+        containerElm.style.left = left + 'px';
+        containerElm.style.height = dimensions.height || '500px';
+        containerElm.style.position = dimensions.position || 'fixed';
+        containerElm.innerHTML = '<div id="testisimo-container-header">' +
+                                    '<button class="testisimo-icon testisimo-icon-pin" onmousedown="event.stopPropagation()" onclick="testisimo.container.pin()">&nbsp;</button>' +
+                                    '<button class="testisimo-icon testisimo-icon-arrow-left" onmousedown="event.stopPropagation()" onclick="testisimo.container.left()">&nbsp;</button>' +
+                                    '<button class="testisimo-icon testisimo-icon-arrow-right" onmousedown="event.stopPropagation()" onclick="testisimo.container.right()">&nbsp;</button>' +
+            
+                                    '<button class="testisimo-icon testisimo-icon-caret-up" onmousedown="event.stopPropagation()" onclick="testisimo.container.collapse()" style="float:right">&nbsp;</button>' +
+                                 '</div>' +
+                                 '<iframe id="' +this.iframeId+ '" class="testisimo-iframe"></iframe>' +
+                                 '<div id="testisimo-container-footer" class="testisimo-icon testisimo-icon-bars"></div>' +
+                                 '<div id="testisimo-container-overlay"></div>';
         document.body.appendChild(containerElm);
+        document.getElementById('testisimo-container-header').addEventListener('mousedown', dragStart);
+        document.getElementById('testisimo-container-footer').addEventListener('mousedown', dragResizeStart);
+        
+        var drag = false;
+        function dragStart(e){
+            e.preventDefault();
+            testisimo.toggleClass(containerElm, 'testisimo-dragged');
+            containerElm.dragOffsetX = e.clientX - parseInt(containerElm.style.left, 10);
+            containerElm.dragOffsetY = e.clientY - parseInt(containerElm.style.top, 10);
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragStop);
+            drag = true;
+            return false;
+        }
+        function dragMove(e){
+            if (!drag) return;
+            var offsetX = containerElm.dragOffsetX;
+            var offsetY = containerElm.dragOffsetY;
+            containerElm.style.left = e.clientX - offsetX+'px';
+            containerElm.style.top = e.clientY - offsetY+'px';
+            return false;
+        }
+        function dragStop(){
+            drag = false;
+            testisimo.toggleClass(containerElm, 'testisimo-dragged');
+            document.removeEventListener('mousemove', dragMove);
+            document.removeEventListener('mousemove', dragResize);
+            document.removeEventListener('mouseup', dragStop);
+            testisimo.container.updateOpts();
+        }
+        function dragResizeStart(e){
+            e.preventDefault();
+            testisimo.toggleClass(containerElm, 'testisimo-dragged');
+            containerElm.dragClientY = e.clientY;
+            containerElm.dragHeight = parseInt(containerElm.style.height, 10);
+            document.addEventListener('mousemove', dragResize);
+            document.addEventListener('mouseup', dragStop);
+            drag = true;
+            return false;
+        }
+        function dragResize(e){
+            if (!drag) return;
+            containerElm.style.height = containerElm.dragHeight + e.clientY - containerElm.dragClientY + 'px';
+            return false;
+        }
+    };
+    
+    Testisimo.prototype.container = {
+        updateOpts: function(){
+            testisimo.localStore.setOptions({
+                top: containerElm.style.top,
+                left: containerElm.style.left,
+                height: containerElm.style.height,
+                position: containerElm.style.position
+            });
+        },
+        pin: function(){
+            var isAbsolute = containerElm.style.position==='absolute';
+            containerElm.style.top = parseInt(containerElm.style.top,10) + (isAbsolute ? -1 : 1)*document.body.scrollTop + 'px';
+            containerElm.style.left = parseInt(containerElm.style.left,10) + (isAbsolute ? -1 : 1)*document.body.scrollLeft + 'px';
+            containerElm.style.position = containerElm.style.position==='absolute' ? 'fixed' : 'absolute';
+            this.updateOpts();
+        },
+        left: function(){
+            containerElm.style.top = '20px';
+            containerElm.style.left = '20px';
+            containerElm.style.height = window.innerHeight - 60 + 'px';
+            this.updateOpts();
+        },
+        right: function(){
+            containerElm.style.top = '20px';
+            containerElm.style.left = window.innerWidth - 320 + 'px';
+            containerElm.style.height = window.innerHeight - 60 + 'px';
+            this.updateOpts();
+        },
+        collapse: function(){
+            containerElm.style.height = '90px';
+            this.updateOpts();
+        }
     };
 
     Testisimo.prototype.getIframe = function(){
@@ -351,7 +465,7 @@
         
         function createElements(){
             setTimeout(function(){
-                document.body.style['margin-right'] = '250px';
+                // document.body.style['margin-left'] = '250px';
                 testisimo.addStyles();
                 testisimo.addContainer();
                 var iframe = testisimo.getIframe();
@@ -403,6 +517,18 @@
     };
 
     Testisimo.prototype.localStore = {
+        // options
+        
+        getOptions: function(){
+            return JSON.parse(window.localStorage.getItem('testisimo:options') || '{}');
+        },
+        setOptions: function(opts){
+            var oldOpts = this.getOptions();
+            for(var key in opts) oldOpts[ key ] = opts[ key ];
+            window.localStorage.setItem('testisimo:options', JSON.stringify(opts));
+        },
+        
+        // projects
         cache: null,
         stringify: function(value){
             return JSON.stringify(value, function(key, value){

@@ -9,6 +9,7 @@ Testisimo.prototype.actions.keyboardWrite = {
     handler: function(targets, opts, variables, done){
         if(targets.length === 0) return done(new Error('Target element not found'));
         if(targets.length > 1) return done(new Error('Multiple target elements not allowed'));
+        if(targets[0].offsetParent === null) return done(new Error('Target element is not visible'));
         if(targets[0].tagName !== 'INPUT' && targets[0].tagName !== 'TEXTAREA') return done(new Error('Target must be input or textarea'));
         if(['checkbox','radio'].indexOf(targets[0].type) > -1) return done(new Error('Boolean inputs (checkbox or radio) not allowed'));
 
@@ -182,6 +183,7 @@ Testisimo.prototype.actions.keyboardKeypress = {
     handler: function(targets, opts, variables, done){
         if(targets.length === 0) return done(new Error('Target element not found'));
         if(targets.length > 1) return done(new Error('Multiple target elements not allowed'));
+        if(targets[0].offsetParent === null) return done(new Error('Target element is not visible'));
         if(targets[0].tagName !== 'INPUT' && targets[0].tagName !== 'TEXTAREA') return done(new Error('Target must be input or textarea'));
         if(['checkbox','radio'].indexOf(targets[0].type) > -1) return done(new Error('Boolean inputs (checkbox or radio) not allowed'));
 

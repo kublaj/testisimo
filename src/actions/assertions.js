@@ -1,15 +1,14 @@
-// TODO:
-// assertInnerHtml, equal, contains, starts with, ends with, 
-// assertAttributes 
-// assertCount (innerhtml, innertext, attributes, elements count)
-
-Testisimo.prototype.actions.assertInnerText = {
-    name:'Assertion - innerText',
-    optsTemplate:'<input type="text" class="form-control input-sm" placeholder="inner Text" ng-model="action.opts.text">',
+Testisimo.prototype.actions.assertElements = {
+    name:'Assertion - Elements Count',
+    optsTemplate:'<input type="text" class="form-control input-sm" placeholder="1" ng-model="action.opts.count">',
     optsPreview: function(opts){
-        return this.name + ' "' +(opts.value||0)+ '"';
+        return this.name + ' "' +(opts.count||'1')+ '"';
     },
     handler: function(targets, opts, variables, done){
-        if(targets.length === 0) return done(new Error('Target element not found'));
+        if(!(opts.count||'').match(/^[0-9]*$/)) return done(new Error('Value "' +opts.count+ '" is not valid Number'));
+        var count = parseInt(opts.count||'1', 10);
+        if(targets.length !== count) return done(new Error('Assertion fail, expected "' +count+ '" but found "' +targets.length+ '"'));
+        
+        done();
     }
 };

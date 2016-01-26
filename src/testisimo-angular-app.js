@@ -1,3 +1,9 @@
+// TODO: 
+// alert icon on error if container is collapsed
+// step notes + icon
+// error handler warning when testing angular apps
+// element path - select parent
+
 /*
  * TESTISIMO ANGULAR APP
  */
@@ -16,7 +22,7 @@ Testisimo.prototype.appHTML = function(){
                     this.getAppTemplates()+
                     '<style>'+
                     'body { margin-top:40px; }'+
-                    '.footer { height:300px; }'+
+                    '.footer { height:30px; }'+
                     '.btn-default.btn-circle { border-radius:50% }'+
                     '.btn.btn-light { background-color:transparent;border-color:transparent;color:#fff; }'+
                     '.test-nav { position:fixed;top:0px;left:0px;right:0px;background-color:#fff;z-index:9999;background-color:#000; }'+
@@ -143,7 +149,7 @@ Testisimo.prototype.appHTML = function(){
                                         '</div>'+
                                         '<div class="details-container" ng-if="expanded.elements">'+
                                             '<div class="details">'+
-            '<button class="btn btn-default btn-sm" ng-click="step.$selectionMode||selectElements(step)" style="width:50%" ng-class="{active:step.$selectionMode}"><i class="fa fa-crosshairs"></i> Pick</button>'+
+                                                '<button class="btn btn-default btn-sm" ng-click="step.$selectionMode||selectElements(step)" style="width:50%" ng-class="{active:step.$selectionMode}"><i class="fa fa-crosshairs"></i> Pick</button>'+
                                                 '<button class="btn btn-default btn-sm" ng-click="showSelectedElements(step)" style="width:50%"><i class="fa fa-eye"></i> Show ({{step.$selectedLength||0}})</button>'+
                                                 '<div class="text-center">'+
                                                     '<small>css selector (and optional attributes)</small>'+
@@ -214,7 +220,7 @@ Testisimo.prototype.appHTML = function(){
 
                     '</div>'+
                     '<div class="footer"></div>'+
-                    '<h5 class="text-center">Testisimo &copy; 2016</h5>'
+                    '<h5 class="text-center">Testisimo &copy; 2016</h5>'+
                 '</body>'+
             '</html>';
 };

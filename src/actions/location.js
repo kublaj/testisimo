@@ -3,7 +3,7 @@ Testisimo.prototype.actions.locationSetUrl = {
     optsTemplate:'<input type="text" class="form-control input-sm" placeholder="/mypath" ng-model="action.opts.location">',
     optsVariables: ['location'], // which opts properties can contain text variabes e.g. {myvar}
     optsPreview: function(opts){
-        return this.name + ' "' +(opts.text||'')+ '"';
+        return this.name + ' "' +(opts.location||'')+ '"';
     },
     handler: function(targets, opts, variables, done){
         if(!opts.location) return done(new Error('Location not set'));
@@ -20,6 +20,18 @@ Testisimo.prototype.actions.locationReload = {
     },
     handler: function(targets, opts, variables, done){
         window.location.reload(true);
+        done();
+    }
+};
+
+Testisimo.prototype.actions.locationBack = {
+    name:'Location History Back (Backbutton)',
+    optsTemplate:'',
+    optsPreview: function(opts){
+        return this.name;
+    },
+    handler: function(targets, opts, variables, done){
+        window.history.back();
         done();
     }
 };
