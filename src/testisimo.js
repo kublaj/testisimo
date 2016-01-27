@@ -334,6 +334,7 @@
     };
 
     Testisimo.prototype.toggleClass = function(elm, className){
+        if(typeof elm.className === 'undefined') return false;
         if(elm.className.indexOf(className) > -1) {
             elm.className = elm.className.replace(' ' + className,'');
             return false;
@@ -451,6 +452,21 @@
         var targets = this.searchDOM(selector, matchObj, variables);
         for(var i=0;i<targets.length;i++) this.toggleClass(targets[i].elm, this.selectedClass);
         return targets;
+    };
+    
+    Testisimo.prototype.selectParent = function(selector, matchObj, variables){
+        this.clearClass(this.selectedClass);
+        var targets = this.searchDOM(selector, matchObj, variables);
+        if(!targets[0]) return;
+        var parentElm = targets[0].elm.parentNode;
+        if(!parentElm) return;
+        
+        this.toggleClass(parentElm, this.selectedClass);
+        return {
+            elm: parentElm,
+            attrs: this.getAttributes(parentElm),
+            tagName: parentElm.tagName
+        };
     };
     
     /*

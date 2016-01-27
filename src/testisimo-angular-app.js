@@ -2,7 +2,6 @@
 // alert icon on error if container is collapsed
 // step notes + icon
 // error handler warning when testing angular apps
-// element path - select parent
 
 /*
  * TESTISIMO ANGULAR APP
@@ -149,8 +148,9 @@ Testisimo.prototype.appHTML = function(){
                                         '</div>'+
                                         '<div class="details-container" ng-if="expanded.elements">'+
                                             '<div class="details">'+
-                                                '<button class="btn btn-default btn-sm" ng-click="step.$selectionMode||selectElements(step)" style="width:50%" ng-class="{active:step.$selectionMode}"><i class="fa fa-crosshairs"></i> Pick</button>'+
-                                                '<button class="btn btn-default btn-sm" ng-click="showSelectedElements(step)" style="width:50%"><i class="fa fa-eye"></i> Show ({{step.$selectedLength||0}})</button>'+
+                                                '<button class="btn btn-default btn-sm" ng-click="selectParent(step)" ng-disabled="step.$selectionMode" style="width:30%"><i class="fa fa-level-up"></i> Parent</button>'+
+                                                '<button class="btn btn-default btn-sm" ng-click="step.$selectionMode||selectElements(step)" style="width:35%" ng-class="{active:step.$selectionMode}"><i class="fa fa-crosshairs"></i> Pick</button>'+
+                                                '<button class="btn btn-default btn-sm" ng-click="showSelectedElements(step)" style="width:35%"><i class="fa fa-eye"></i> Show ({{step.$selectedLength||0}})</button>'+
                                                 '<div class="text-center">'+
                                                     '<small>css selector (and optional attributes)</small>'+
                                                     '<input type="text" class="form-control input-sm" ng-model="step.$selector" placeholder="css selector" ng-change="step.selector=step.$selector">'+
@@ -441,17 +441,20 @@ Testisimo.prototype.appScript = function(){
         };
 
         var selectedCb;
-        $scope.selectElements = function(step){
-            step.$selectionMode = true;
-
-            selectedCb = function(target){
+        function createSelectedCb(step, addVisibleMatch){
+            return function(target){
                 step.$selector = (target.tagName||'').toLowerCase();
                 step.$match = [];
                 for(var key in target.attrs) step.$match.push({ name:key, operator:'=', value:target.attrs[key] });
-                step.$match.push({ name:'isVisible', operator:'=', value:'true' });
+                if(addVisibleMatch) step.$match.push({ name:'isVisible', operator:'=', value:'true' });
                 step.$selectionMode = false;
                 $scope.updateMatch(step);
             };
+        }
+        $scope.selectElements = function(step){
+            step.$selectionMode = true;
+
+            selectedCb = createSelectedCb(step, true);
             testisimo.selectMode();
         };
 
@@ -461,6 +464,14 @@ Testisimo.prototype.appScript = function(){
                 selectedCb = null;
             });
         });
+        
+        $scope.selectParent = function(step){
+            var parent = testisimo.selectParent(step.$selector, $scope.arrayToObjectMatch(step.$match), $scope.test.variables);
+            if(parent) {
+                createSelectedCb(step, true)(parent);
+                $scope.showSelectedElements(step);
+            }
+        };
 
         $scope.showSelectedElements = function(step){
             step.$selectedLength = testisimo.selectElements(step.$selector, $scope.arrayToObjectMatch(step.$match), $scope.test.variables).length;
